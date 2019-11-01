@@ -2,7 +2,7 @@ package tools;
 
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
 
-import model.MkmBoolean;
+import entities.MkmBoolean;
 
 public class MkmBooleanConverter extends AbstractSingleValueConverter {
 

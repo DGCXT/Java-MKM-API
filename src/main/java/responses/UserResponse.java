@@ -6,28 +6,28 @@ import java.util.List;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-import entities.Account;
 import entities.Link;
+import entities.User;
 
-@XStreamAlias("AccountResponse")
-public class AccountResponse 
-{	
-	private Account account;
+@XStreamAlias("UserResponse")
+public class UserResponse 
+{
+	private User user;
 	
 	@XStreamImplicit(itemFieldName="link")
 	private List<Link> HATEOAS = new ArrayList<Link>();
 	
-	public AccountResponse()
+	public UserResponse()
 	{
 		
 	}
 
-	public Account getAccount() {
-		return account;
+	public User getUser() {
+		return user;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public List<Link> getHATEOAS() {

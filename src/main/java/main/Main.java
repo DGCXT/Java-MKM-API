@@ -6,9 +6,13 @@ import java.util.List;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import entities.Account;
+import entities.User;
 import exceptions.MkmException;
-import model.User;
-import model.UserCollection;
+import responses.AccountResponse;
+import responses.MessageOverviewResponse;
+import responses.UserCollectionResponse;
+import responses.UserResponse;
 import service.AccountService;
 import service.ArticleService;
 import service.CartServices;
@@ -35,7 +39,16 @@ public class Main
 			e.printStackTrace();
 		}
 		
-		AccountService.getInstance().getAccountDetails();
+		UserService userService = UserService.getInstance();
+		AccountService accountService = AccountService.getInstance();
+		
+		//AccountResponse accountResponse = accountService.getAccountDetails();
+		MessageOverviewResponse messageResponse = accountService.getMessageOverview();
+		//MessageThreadResponse messageResponse = accountService.getMessagesThreadWithUser(userService.getUser("Itaca").getUser().getIdUser());
+		//UserResponse userResponse = userService.getUser("Itaca");
+		//UserCollectionResponse userCollectionResponse = userService.discoverUsers("Itaca");
+		
+		System.out.println();
 	}
 
 }

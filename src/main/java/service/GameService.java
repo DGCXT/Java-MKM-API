@@ -14,11 +14,11 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
+import entities.Expansion;
+import entities.Game;
+import entities.Link;
+import entities.Response;
 import exceptions.MkmNetworkException;
-import model.Expansion;
-import model.Game;
-import model.Link;
-import model.Response;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 

@@ -16,10 +16,10 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
+import entities.Article;
+import entities.Basket;
+import entities.ShoppingCart;
 import exceptions.MkmNetworkException;
-import model.Article;
-import model.Basket;
-import model.ShoppingCart;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 

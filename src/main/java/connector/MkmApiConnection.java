@@ -16,15 +16,23 @@ import tools.MkmConstants;
 public class MkmApiConnection {
 	
 	private static MkmApiConnection mkmApiConnectionInstance = new MkmApiConnection();
-	private AuthenticationServices auth;
+	private static AuthenticationServices auth;
 	
 	private MkmApiConnection()
 	{
-		this.auth = MkmAPIConfig.getInstance().getAuthenticator();
+		auth = MkmAPIConfig.getInstance().getAuthenticator();
 	}
 
 	public static MkmApiConnection getInstance()
 	{
+		if (mkmApiConnectionInstance == null)
+		{
+			auth = MkmAPIConfig.getInstance().getAuthenticator();
+			if (auth == null)
+			{
+				throw new IllegalStateException("Authentication object hasn't been initialized");
+			}
+		}
 		return mkmApiConnectionInstance;
 	}
 	
@@ -33,12 +41,14 @@ public class MkmApiConnection {
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url, "GET")) ;
 		connection.connect();
+		
 		String body = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
 		//MkmAPIConfig.getInstance().updateCount(connection); TODO: Investigate what this is.
+		
 		return new MkmResponse(connection.getResponseCode(), body);
 	}
 	
-	public MkmResponse POST(String url, boolean doOutput, String content) throws MkmException, IOException
+	public MkmResponse POST(String url, boolean doOutput, String body) throws MkmException, IOException
 	{
     	HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url,"POST")) ;
@@ -47,11 +57,21 @@ public class MkmApiConnection {
 		connection.connect();
 		
 		OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-		out.write(content);
+		out.write(body);
 		out.close();
 		
-		String body = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+		String responseBody = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
 		
-		return new MkmResponse(connection.getResponseCode(), body);
+		return new MkmResponse(connection.getResponseCode(), responseBody);
+	}
+	
+	public MkmResponse POST(String url, String body)
+	{
+		return null;
+	}
+	
+	public MkmResponse DELETE(String url)
+	{
+		return null;
 	}
 }

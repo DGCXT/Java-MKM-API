@@ -9,36 +9,39 @@ import com.thoughtworks.xstream.security.AnyTypePermission;
 
 import connector.MkmApiConnection;
 import connector.MkmResponse;
+import entities.Account;
+import entities.BankAccount;
+import entities.Message;
+import entities.MessageCollection;
+import entities.User;
 import exceptions.MkmException;
 import exceptions.MkmNetworkException;
-import model.Account;
-import model.BankAccount;
-import model.Message;
-import model.MessageCollection;
-import model.User;
-import model.UserCollection;
 import responses.AccountResponse;
+import responses.MessageOverviewResponse;
+import responses.UserCollectionResponse;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 
 public class AccountService {
 
 	private static AccountService accountServiceInstance = new AccountService();
-	private AuthenticationServices auth;
+	
+	private MessageService messageService;
+	private MkmApiConnection mkmApiConnection;
+	
 	private XStream xstream;
 	
 	private AccountService()
 	{
-		auth=MkmAPIConfig.getInstance().getAuthenticator();
-		
+		messageService = MessageService.getInstance();
+ 		mkmApiConnection = MkmApiConnection.getInstance();
+ 		
 		xstream = new XStream(new StaxDriver());
 		XStream.setupDefaultSecurity(xstream);
  		xstream.addPermission(AnyTypePermission.ANY);
- 		xstream.alias("account", Account.class);
- 		xstream.alias("response", AccountResponse.class);
- 		xstream.alias("name", Name.class);
- 		xstream.alias("banckAccount", BankAccount.class);
  		xstream.ignoreUnknownElements();
+ 		
+ 		xstream.processAnnotations(AccountResponse.class);
 	}
 	
 	public static AccountService getInstance()
@@ -50,43 +53,46 @@ public class AccountService {
 	{
 		String url = MkmConstants.MKM_API_URL.concat("/account");
 		
-		MkmResponse response = MkmApiConnection.getInstance().GET(url);
+		MkmResponse response = mkmApiConnection.GET(url);
 		
 		if (!(response.getCode()>=200 && response.getCode()<300))
 		{
 			throw new MkmNetworkException(response.getCode());
 		}
 		
-		return (AccountResponse) xstream.fromXML(response.getBody());
+		String body = response.getBody().replace("response", "AccountResponse");
+		body = body.replaceAll("links", "link");
+		
+		return (AccountResponse) xstream.fromXML(body);
 	}
 	
-	public MessageCollection getMessageOverview()
+	public MessageOverviewResponse getMessageOverview() throws MkmException, IOException
 	{
-		return null;
+		return messageService.getMessageOverview();
 	}
 	
-	public MessageCollection getMessagesThreadWithUser(String anotherUser)
+	public MessageOverviewResponse getMessagesThreadWithUser(String anotherUser) throws MkmException, IOException
 	{
-		return null;
+		return messageService.getMessagesThreadWithUser(anotherUser);
 	}
 	
-	public Message getSpecificMessage(String anotherUser, String messageId)
+	public MessageOverviewResponse getSpecificMessage(String anotherUser, String messageId)
 	{
-		return null;
+		return messageService.getSpecificMessage(anotherUser, messageId);
 	}
 	
 	public void sendMessageToUser(String anotherUser)
 	{
-		
+		messageService.sendMessageToUser(anotherUser);
 	}
 	
 	public void deleteMessageThread(String anotherUser)
 	{
-		
+		messageService.deleteMessageThread(anotherUser);
 	}
 	
 	public void deletedSpecificMessage(String anotherUser, String messageId)
 	{
-		
+		messageService.deletedSpecificMessage(anotherUser, messageId);
 	}
 }

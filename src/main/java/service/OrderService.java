@@ -16,12 +16,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
+import entities.Article;
+import entities.Link;
+import entities.Order;
+import entities.Product;
+import entities.Response;
 import exceptions.MkmNetworkException;
-import model.Article;
-import model.Link;
-import model.Order;
-import model.Product;
-import model.Response;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 

@@ -23,12 +23,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
+import entities.Article;
+import entities.Game;
+import entities.Link;
+import entities.Response;
+import entities.Article.ARTICLES_ATT;
 import exceptions.MkmNetworkException;
-import model.Article;
-import model.Game;
-import model.Link;
-import model.Response;
-import model.Article.ARTICLES_ATT;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 import tools.Tools;

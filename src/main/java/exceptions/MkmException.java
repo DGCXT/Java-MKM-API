@@ -9,7 +9,7 @@ public class MkmException extends IOException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public MkmException(model.Error error) {
+	public MkmException(entities.Error error) {
 		super(error.toString());
 	}
 	

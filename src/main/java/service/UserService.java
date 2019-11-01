@@ -18,37 +18,37 @@ import com.thoughtworks.xstream.security.AnyTypePermission;
 
 import connector.MkmApiConnection;
 import connector.MkmResponse;
+import entities.Link;
+import entities.MessageThread;
+import entities.Response;
+import entities.User;
 import exceptions.MkmException;
 import exceptions.MkmNetworkException;
-import model.Link;
-import model.Response;
-import model.Thread;
-import model.User;
-import model.UserCollection;
+import responses.UserCollectionResponse;
+import responses.UserResponse;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 
 public class UserService {
 	
-	private XStream xstream;
+	
 	private AuthenticationServices auth;
+	private MkmApiConnection mkmApiConnection;
+	
+	private XStream xstream;
 	
 	private static UserService userServiceInstance = new UserService();
 	
 	private UserService() {
 		
 		auth=MkmAPIConfig.getInstance().getAuthenticator();
+		mkmApiConnection = MkmApiConnection.getInstance();
 		
 		xstream = new XStream(new StaxDriver());
-		XStream.setupDefaultSecurity(xstream);
- 		xstream.addPermission(AnyTypePermission.ANY);
- 		xstream.alias("user", User.class);
- 		xstream.alias("users", UserCollection.class);
- 		xstream.ignoreUnknownElements();
- 		//xstream.addImplicitCollection(Response.class,"links", Link.class);
- 		//xstream.addImplicitCollection(Response.class,"thread", Thread.class);
- 		//xstream.addImplicitCollection("user", User.class);
- 		//xstream.addImplicitCollection(Thread.class,"links", Link.class);
+		//XStream.setupDefaultSecurity(xstream);
+		
+		xstream.processAnnotations(UserCollectionResponse.class);
+		xstream.processAnnotations(UserResponse.class);
 	}
 	
 	public static UserService getInstance()
@@ -56,41 +56,41 @@ public class UserService {
 		return userServiceInstance;
 	}
 	
-	public UserCollection discoverUsers(String name) throws IOException
+	public UserCollectionResponse discoverUsers(String name) throws IOException
 	{
 		String url = MkmConstants.MKM_API_URL+"/users/find?search="+name.toLowerCase();
 
-		MkmResponse response = MkmApiConnection.getInstance().GET(url);
+		MkmResponse response = mkmApiConnection.GET(url);
 
 		if (!(response.getCode()>=200 && response.getCode()<300))
 		{
 			throw new MkmNetworkException(response.getCode());
 		}
-
-		//TODO: Improve this.
-		String xml = response.getBody();
-		xml = xml.substring(xml.indexOf("<users>"), xml.indexOf("<links>"));
-
-		return (UserCollection) xstream.fromXML(xml);
+		
+		String body = response.getBody();
+		body = body.replaceAll("response", "UserCollectionResponse");
+		body = body.replaceAll("users", "user");
+		body = body.replaceAll("links", "link");
+		
+		return (UserCollectionResponse) xstream.fromXML(body);
 	}
 	
-	public User getUser(String exactName) throws MalformedURLException, IOException
+	public UserResponse getUser(String exactName) throws MalformedURLException, IOException
 	{
 		String url=MkmConstants.MKM_API_URL+"/users/"+ exactName;
 		
-		MkmResponse response = MkmApiConnection.getInstance().GET(url);
+		MkmResponse response = mkmApiConnection.GET(url);
 		
 		if (!(response.getCode()>=200 && response.getCode()<300))
 		{
 			throw new MkmNetworkException(response.getCode());
 		}
-
-		String xml = response.getBody();
-	 	xml = xml.substring(xml.indexOf("<user>"), xml.indexOf("<links>"));
-	 	
-		User res = (User) xstream.fromXML(xml);
-	 	
-		return res;
+		
+		String body = response.getBody();
+		body = body.replaceAll("response", "UserResponse");
+		body = body.replaceAll("links", "link");
+		
+		return (UserResponse) xstream.fromXML(body);
 	}
 	
 	public boolean setVacation(boolean vacation) throws IOException
@@ -150,7 +150,7 @@ public class UserService {
 		
 	}
 	
-	public List<Thread> getMessages(User other) throws IOException
+	public List<MessageThread> getMessages(User other) throws IOException
 	{
 		String link=MkmConstants.MKM_API_URL+"/account/messages";
 		

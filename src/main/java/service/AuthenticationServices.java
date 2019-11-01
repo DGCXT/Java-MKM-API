@@ -26,11 +26,11 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
+import entities.Link;
+import entities.Response;
+import entities.User;
 import exceptions.MkmException;
 import exceptions.MkmNetworkException;
-import model.Link;
-import model.Response;
-import model.User;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
 import tools.Tools;

@@ -22,8 +22,9 @@ public class MkmAPIConfig {
 	{	
 	}
 	
-	public AuthenticationServices getAuthenticator() {
-		return auth;
+	public AuthenticationServices getAuthenticator() 
+	{
+		return this.auth;
 	}
 	
 	public void init(String accessSecret ,String accessToken ,String appSecret,String appToken) throws MkmException
