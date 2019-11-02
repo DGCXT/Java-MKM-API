@@ -1,6 +1,7 @@
 package main;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
@@ -11,6 +12,7 @@ import entities.User;
 import exceptions.MkmException;
 import responses.AccountResponse;
 import responses.MessageOverviewResponse;
+import responses.MessagesWithUserResponse;
 import responses.UserCollectionResponse;
 import responses.UserResponse;
 import service.AccountService;
@@ -20,6 +22,7 @@ import service.ProductServices;
 import service.StockService;
 import service.UserService;
 import service.WantsService;
+import tools.DisplayLanguage;
 import tools.MkmAPIConfig;
 
 public class Main
@@ -40,13 +43,29 @@ public class Main
 		}
 		
 		UserService userService = UserService.getInstance();
-		AccountService accountService = AccountService.getInstance();
+		UserResponse userResponse = userService.getUser("Itaca");
+		User itaca = userResponse.getUser();
 		
-		//AccountResponse accountResponse = accountService.getAccountDetails();
-		MessageOverviewResponse messageResponse = accountService.getMessageOverview();
-		//MessageThreadResponse messageResponse = accountService.getMessagesThreadWithUser(userService.getUser("Itaca").getUser().getIdUser());
-		//UserResponse userResponse = userService.getUser("Itaca");
-		//UserCollectionResponse userCollectionResponse = userService.discoverUsers("Itaca");
+		AccountService accountService = AccountService.getInstance();
+		//AccountResponse aResponse = accountService.getAccountDetails();
+		//MessageOverviewResponse moResponse = accountService.getMessageOverview();
+		//MessagesWithUserResponse mwu = accountService.getMessagesThreadWithUser(itaca.getIdUser()); 
+		//MessagesWithUserResponse response = accountService.getSpecificMessage(itaca.getIdUser(), "5cbee2231335a8545e545506");
+		
+		//accountService.getUnreadMessages();
+		//accountService.redeemCoupons(new ArrayList<String>().add("12345"));
+		AccountResponse a1 = accountService.changeVacationStatus(false, false, false);
+		//accountService.changeVacationStatus(true, true, false);
+		//accountService.changeVacationStatus(true, true, true);
+		AccountResponse a2 = accountService.changeDisplayLanguage(DisplayLanguage.ENGLISH);
+		//accountService.changeDisplayLanguage(DisplayLanguage.FRENCH);
+		//accountService.changeDisplayLanguage(DisplayLanguage.GERMAN);
+		//accountService.changeDisplayLanguage(DisplayLanguage.SPANISH);
+		//accountService.changeDisplayLanguage(DisplayLanguage.ITALIAN);
+		
+//		UserService userService = UserService.getInstance();
+//		UserResponse uResponse = userService.getUser("Itaca");
+//		UserCollectionResponse ucResponse = userService.discoverUsers("itaca");
 		
 		System.out.println();
 	}

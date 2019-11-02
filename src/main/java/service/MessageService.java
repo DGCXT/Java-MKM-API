@@ -14,6 +14,8 @@ import exceptions.MkmException;
 import exceptions.MkmNetworkException;
 import responses.AccountResponse;
 import responses.MessageOverviewResponse;
+import responses.MessagesWithUserResponse;
+import responses.UserResponse;
 import tools.MkmConstants;
 
 public class MessageService {
@@ -33,6 +35,7 @@ public class MessageService {
  		xstream.ignoreUnknownElements();
  		
  		xstream.processAnnotations(MessageOverviewResponse.class);
+ 		xstream.processAnnotations(MessagesWithUserResponse.class);
 	}
 
 	public static MessageService getInstance()
@@ -46,56 +49,67 @@ public class MessageService {
 		
 		MkmResponse response = mkmApiConnection.GET(url);
 		
-		if (!(response.getCode()>=200 && response.getCode()<300))
-		{
-			throw new MkmNetworkException(response.getCode());
-		}
-		
-		String body = response.getBody();
-		body = body.replace("response", "MessageOverviewResponse");
-		body = body.replaceAll("links", "link");
-		
-		System.out.println(body);
+		String body = response.getBody().replace("response", "MessageOverviewResponse");
 		
 		return (MessageOverviewResponse) xstream.fromXML(body);
 	}
 	
-	public MessageOverviewResponse getMessagesThreadWithUser(String anotherUserId) throws MkmException, IOException
+	public MessagesWithUserResponse getMessagesThreadWithUser(String anotherUserId) throws MkmException, IOException
 	{
 		String url = MkmConstants.MKM_API_URL.concat("/account/messages/").concat(anotherUserId);
 		
 		MkmResponse response = mkmApiConnection.GET(url);
 		
-		if (!(response.getCode()>=200 && response.getCode()<300))
-		{
-			throw new MkmNetworkException(response.getCode());
-		}
+		String body = response.getBody().replace("response", "MessagesWithUserResponse");
 		
-		String body = response.getBody().replace("response", "MessageResponse");
-		body = body.replaceAll("links", "link");
-		
-		System.out.println(body);
-		
-		return (MessageOverviewResponse) xstream.fromXML(body);
+		return (MessagesWithUserResponse) xstream.fromXML(body);
 	}
 	
-	public MessageOverviewResponse getSpecificMessage(String anotherUser, String messageId)
+	public MessagesWithUserResponse getSpecificMessage(String anotherUserId, String messageId) throws MkmException, IOException
 	{
-		return null;
+		String url = MkmConstants.MKM_API_URL.concat("/account/messages/").concat(anotherUserId + "/" + messageId);
+		
+		MkmResponse response = mkmApiConnection.GET(url);
+		
+		String body = response.getBody().replace("response", "MessagesWithUserResponse");
+		
+		return (MessagesWithUserResponse) xstream.fromXML(body);
 	}
 	
-	public void sendMessageToUser(String anotherUser)
+	public void sendMessageToUser(String anotherUserId, String message) throws MkmException, IOException
 	{
+		String deleteThreadUrl = "/account/messages/".concat(anotherUserId);
+		String requestUrl = MkmConstants.MKM_API_URL.concat(deleteThreadUrl);
 		
+		String requestBody = String.format(
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>%n<request>%s%n</request>", message);
+		
+		MkmResponse response = mkmApiConnection.POST(requestUrl, requestBody);
+		
+		//String body = response.replaceAll("response", );
 	}
 	
-	public void deleteMessageThread(String anotherUser)
+	public void deleteMessageThread(String anotherUserId)
 	{
+		String deleteThreadUrl = "/account/messages/".concat(anotherUserId);
+		String requestUrl = MkmConstants.MKM_API_URL.concat(deleteThreadUrl);
 		
+		mkmApiConnection.DELETE(requestUrl);
 	}
 	
-	public void deletedSpecificMessage(String anotherUser, String messageId)
+	public void deletedSpecificMessage(String anotherUserId, String messageId)
 	{
+		String deleteThreadUrl = "/account/messages/".concat(anotherUserId + "/" + messageId);
+		String requestUrl = MkmConstants.MKM_API_URL.concat(deleteThreadUrl);
 		
+		mkmApiConnection.DELETE(requestUrl);
+	}
+	
+	public void getUnreadMessages() throws MkmException, IOException
+	{
+		String unreadMessagesUrl = "/account/messages/find?unread=true";
+		String requestUrl = MkmConstants.MKM_API_URL.concat(unreadMessagesUrl);
+		
+		MkmResponse response = mkmApiConnection.GET(requestUrl);
 	}
 }

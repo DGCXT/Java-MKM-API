@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 
 import exceptions.MkmException;
+import exceptions.MkmNetworkException;
 import service.AuthenticationServices;
 import tools.MkmAPIConfig;
 import tools.MkmConstants;
@@ -39,35 +40,79 @@ public class MkmApiConnection {
 	public MkmResponse GET(String url) throws MkmException, IOException
 	{
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url, "GET")) ;
+        connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url, "GET"));
+        connection.setRequestMethod("GET");
 		connection.connect();
-		
-		String body = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
 		//MkmAPIConfig.getInstance().updateCount(connection); TODO: Investigate what this is.
 		
-		return new MkmResponse(connection.getResponseCode(), body);
-	}
-	
-	public MkmResponse POST(String url, boolean doOutput, String body) throws MkmException, IOException
-	{
-    	HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url,"POST")) ;
-   		connection.setDoOutput(doOutput);
-		connection.setRequestMethod("POST");
-		connection.connect();
+		int responseCode = connection.getResponseCode();
 		
-		OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-		out.write(body);
-		out.close();
+		if (!(responseCode>=200 && responseCode<300))
+		{
+			throw new MkmNetworkException(responseCode);
+		}
 		
 		String responseBody = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
 		
-		return new MkmResponse(connection.getResponseCode(), responseBody);
+		return new MkmResponse(responseCode, responseBody);
 	}
 	
-	public MkmResponse POST(String url, String body)
+	public MkmResponse POST(String url, String body) throws MkmException, IOException
 	{
-		return null;
+		boolean doOutput = (body == null || body.isEmpty()) ? false : true;
+		
+    	HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url,"POST"));
+		connection.setRequestMethod("POST");
+		connection.setDoOutput(doOutput);
+		connection.connect();
+		
+		if (doOutput)
+		{
+			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+			out.write(body);
+			out.close();
+		}
+		
+		int responseCode = connection.getResponseCode();
+		
+		if (!(responseCode>=200 && responseCode<300))
+		{
+			throw new MkmNetworkException(responseCode);
+		}
+		
+		String responseBody = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+		
+		return new MkmResponse(responseCode, responseBody);
+	}
+	
+	public MkmResponse PUT(String url, String body) throws IOException
+	{
+		boolean doOutput = (body == null || body.isEmpty()) ? false : true;
+		
+    	HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.addRequestProperty(MkmConstants.OAUTH_AUTHORIZATION_HEADER, auth.generateOAuthSignature2(url,"PUT"));
+		connection.setRequestMethod("PUT");
+		connection.setDoOutput(doOutput);
+		connection.connect();
+		
+		if (doOutput)
+		{
+			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+			out.write(body);
+			out.close();
+		}
+		
+		int responseCode = connection.getResponseCode();
+		
+		if (!(responseCode>=200 && responseCode<300))
+		{
+			throw new MkmNetworkException(responseCode);
+		}
+		
+		String responseBody = IOUtils.toString(connection.getInputStream(), StandardCharsets.UTF_8);
+		
+		return new MkmResponse(responseCode, responseBody);
 	}
 	
 	public MkmResponse DELETE(String url)

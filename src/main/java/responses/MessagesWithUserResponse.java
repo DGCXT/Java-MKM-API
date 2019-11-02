@@ -7,15 +7,17 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import entities.Link;
-import entities.MessageThread;
+import entities.Message;
+import entities.User;
 
-@XStreamAlias("MessageOverviewResponse")
-public class MessageOverviewResponse {
+@XStreamAlias("MessagesWithUserResponse")
+public class MessagesWithUserResponse {
 
-	@XStreamImplicit(itemFieldName="thread")
-	private List<MessageThreadResponse> thread = new ArrayList<MessageThreadResponse>();
+	private User partner;
+	
+	@XStreamImplicit(itemFieldName="message")
+	private List<Message> message = new ArrayList<>();
 	
 	@XStreamImplicit(itemFieldName="links")
 	private List<Link> links;
-	
 }

@@ -12,10 +12,10 @@ import entities.User;
 @XStreamAlias("UserCollectionResponse")
 public class UserCollectionResponse {
 
-	@XStreamImplicit(itemFieldName="user")
+	@XStreamImplicit(itemFieldName="users")
 	private List<User> users = new ArrayList<User>();
 	
-	@XStreamImplicit(itemFieldName="link")
+	@XStreamImplicit(itemFieldName="links")
 	private List<Link> HATEOAS = new ArrayList<Link>();
 	
 	public UserCollectionResponse()

@@ -1,7 +1,12 @@
 package entities;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 public class User
 {	
@@ -25,6 +30,9 @@ public class User
 	private int soldItems;
 	private int avgShippingTime;
 	private boolean onVacation;
+	
+	@XStreamImplicit(itemFieldName="links")
+	private List<Link> links;
 	
 	@Override
 	public String toString() {
@@ -156,10 +164,4 @@ public class User
 	public void setOnVacation(boolean onVacation) {
 		this.onVacation = onVacation;
 	}
-	
-	
-	
-	
-	
-	
 }

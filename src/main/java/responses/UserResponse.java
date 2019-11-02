@@ -9,12 +9,12 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import entities.Link;
 import entities.User;
 
-@XStreamAlias("UserResponse")
-public class UserResponse 
+//@XStreamAlias("UserResponse")
+public class UserResponse
 {
 	private User user;
 	
-	@XStreamImplicit(itemFieldName="link")
+	@XStreamImplicit(itemFieldName="links")
 	private List<Link> HATEOAS = new ArrayList<Link>();
 	
 	public UserResponse()

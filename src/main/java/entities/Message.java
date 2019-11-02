@@ -1,10 +1,11 @@
 package entities;
 
 import java.util.Date;
+import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-@XStreamAlias("message")
 public class Message {
 
 	private String idMessage;
@@ -13,6 +14,8 @@ public class Message {
 	private String text;
 	private boolean unread;
 	
+	@XStreamImplicit(itemFieldName="links")
+	private List<Link> links;
 	
 	@Override
 	public String toString() {
