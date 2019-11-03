@@ -12,7 +12,7 @@ import entities.User;
 import exceptions.MkmException;
 import responses.AccountResponse;
 import responses.MessageOverviewResponse;
-import responses.MessagesWithUserResponse;
+//import responses.MessagesWithUserResponse;
 import responses.UserCollectionResponse;
 import responses.UserResponse;
 import service.AccountService;
@@ -22,16 +22,17 @@ import service.ProductServices;
 import service.StockService;
 import service.UserService;
 import service.WantsService;
-import tools.DisplayLanguage;
+//import tools.DisplayLanguage;
 import tools.MkmAPIConfig;
 
 public class Main
 {
 
-	private static String ACCESS_TOKEN = "3BjafD2C4xgj6HwpzDwz2mzSYPFCSoJH";
-	private static String ACCESS_TOKEN_SECRET = "ZW2h838Vtl5rcM6KGiS9m5PPUpfZ6AvO";
-	private static String APP_TOKEN = "hnn6TZjbyBwUbYXe";
-	private static String APP_SECRET = "onyvT8TTN2tQdz55IFVY0OMJIIDnySIZ";
+	private static String APP_TOKEN = "85by6ZmgNVeccIIN";
+	private static String APP_SECRET = "qIh6JjCa99rLs3O92yepOMop7LyPzvpZ";
+	private static String ACCESS_TOKEN = "TqiOs0yzqKvqvm12BvqdZbfQ3JcSushD";
+	private static String ACCESS_TOKEN_SECRET = "G82dOchJ2z4qbJi7oVKeKB5pN75MCaTl";
+
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException 
@@ -46,7 +47,7 @@ public class Main
 		UserResponse userResponse = userService.getUser("Itaca");
 		User itaca = userResponse.getUser();
 		
-		AccountService accountService = AccountService.getInstance();
+		//AccountService accountService = AccountService.getInstance();
 		//AccountResponse aResponse = accountService.getAccountDetails();
 		//MessageOverviewResponse moResponse = accountService.getMessageOverview();
 		//MessagesWithUserResponse mwu = accountService.getMessagesThreadWithUser(itaca.getIdUser()); 
@@ -54,10 +55,10 @@ public class Main
 		
 		//accountService.getUnreadMessages();
 		//accountService.redeemCoupons(new ArrayList<String>().add("12345"));
-		AccountResponse a1 = accountService.changeVacationStatus(false, false, false);
+		//AccountResponse a1 = accountService.changeVacationStatus(false, false, false);
 		//accountService.changeVacationStatus(true, true, false);
 		//accountService.changeVacationStatus(true, true, true);
-		AccountResponse a2 = accountService.changeDisplayLanguage(DisplayLanguage.ENGLISH);
+		//AccountResponse a2 = accountService.changeDisplayLanguage(DisplayLanguage.ENGLISH);
 		//accountService.changeDisplayLanguage(DisplayLanguage.FRENCH);
 		//accountService.changeDisplayLanguage(DisplayLanguage.GERMAN);
 		//accountService.changeDisplayLanguage(DisplayLanguage.SPANISH);
@@ -66,6 +67,11 @@ public class Main
 //		UserService userService = UserService.getInstance();
 //		UserResponse uResponse = userService.getUser("Itaca");
 //		UserCollectionResponse ucResponse = userService.discoverUsers("itaca");
+		
+		ArticleService articleService = ArticleService.getInstance();
+		//articleService.getArticlesFromUser(itaca.getIdUser());
+		//articleService.getProducts("Springleaf");
+		articleService.getArticles("265535", null);
 		
 		System.out.println();
 	}
