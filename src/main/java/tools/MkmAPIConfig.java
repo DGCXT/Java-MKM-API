@@ -7,13 +7,13 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import exceptions.MkmException;
-import service.AuthenticationServices;
+import service.authentication.Authenticator;
 
 public class MkmAPIConfig {
 
 	private static MkmAPIConfig instance = new MkmAPIConfig();
 	
-	private AuthenticationServices auth;
+	private Authenticator auth;
 	
 	private int maxCall=0;
 	private int countCall;
@@ -22,19 +22,19 @@ public class MkmAPIConfig {
 	{	
 	}
 	
-	public AuthenticationServices getAuthenticator() 
+	public Authenticator getAuthenticator() 
 	{
 		return this.auth;
 	}
 	
 	public void init(String accessSecret ,String accessToken ,String appSecret,String appToken) throws MkmException
 	{
-		auth=new AuthenticationServices(accessSecret, accessToken, appSecret, appToken);
+		auth=new Authenticator(accessSecret, accessToken, appSecret, appToken);
 	}
 	
 	public void init(Properties magicCardMaketPropFile) throws MkmException
 	{
-		auth=new AuthenticationServices(magicCardMaketPropFile.getProperty("APP_ACCESS_TOKEN_SECRET"),
+		auth=new Authenticator(magicCardMaketPropFile.getProperty("APP_ACCESS_TOKEN_SECRET"),
 										magicCardMaketPropFile.getProperty("APP_ACCESS_TOKEN"),
 										magicCardMaketPropFile.getProperty("APP_SECRET"),
 										magicCardMaketPropFile.getProperty("APP_TOKEN"));

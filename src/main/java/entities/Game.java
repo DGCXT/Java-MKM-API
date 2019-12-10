@@ -1,35 +1,51 @@
 package entities;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-@XStreamAlias("game")
 public class Game
 {
-	@XStreamAlias("idGame")
 	private int idGame;
-	@XStreamAlias("name")
 	private String name;
-	@XStreamAlias("abbreviation")
 	private String abbreviation;
-	 
-	public int getIdGame() {
+	
+	@XStreamImplicit(itemFieldName="links")
+	private List<Link> links = new ArrayList<Link>();
+	
+	public int getGameId() 
+	{
 		return idGame;
 	}
-	public void setIdGame(int idGame) {
-		this.idGame = idGame;
+	
+	public void setGameId(int gameId) 
+	{
+		this.idGame = gameId;
 	}
-	public String getName() {
+	
+	public String getName() 
+	{
 		return name;
 	}
-	public void setName(String name) {
+	
+	public void setName(String name) 
+	{
 		this.name = name;
 	}
-	public String getAbbreviation() {
+	
+	public String getAbbreviation() 
+	{
 		return abbreviation;
 	}
-	public void setAbbreviation(String abbreviation) {
+	
+	public void setAbbreviation(String abbreviation) 
+	{
 		this.abbreviation = abbreviation;
-	}	 
+	}
+	
+	public List<Link> getLinks()
+	{
+		return this.links;
+	}
 }

@@ -1,8 +1,7 @@
 package exceptions;
 
-import java.io.IOException;
 
-public class MkmException extends IOException {
+public class MkmException extends Exception {
 
 	/**
 	 * 

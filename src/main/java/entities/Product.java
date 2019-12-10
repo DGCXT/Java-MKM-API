@@ -3,18 +3,10 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 
-public class Product implements Serializable
+public class Product
 {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public enum PRODUCT_ATTS {exact,idGame,idLanguage,start,maxResults}
-	
 	private int idProduct;
 	private String idMetaproduct;
-	private int idGame;
 	private Integer countReprints;
 	private String enName;
 	private List<Localization> localization;
@@ -22,12 +14,15 @@ public class Product implements Serializable
 	private String image;
 	private String gameName;
 	private String categoryName;
+	private int idGame;
 	private String number;
 	private String rarity;
 	private String expansionName;
 	private Expansion expansion;
 	private PriceGuide priceGuide;
 	private List<Expansion> reprint;
+	private int countArticles;
+	private int countFoils;
 	private List<Link> links;
 	private Category category;
 	

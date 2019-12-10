@@ -1,11 +1,9 @@
 package entities;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 public class User
@@ -32,7 +30,7 @@ public class User
 	private boolean onVacation;
 	
 	@XStreamImplicit(itemFieldName="links")
-	private List<Link> links;
+	private List<Link> links = new ArrayList<Link>();
 	
 	@Override
 	public String toString() {

@@ -1,13 +1,7 @@
 package entities;
 
-import java.io.Serializable;
-
-public class Article implements Serializable
+public class Article
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private int idArticle;
 	private int idProduct;
 	private Localization language;
@@ -23,8 +17,6 @@ public class Article implements Serializable
 	private boolean isAltered;
 	private Product product;
 	private Link links;
-	
-	public enum ARTICLES_ATT {start, maxResults,userType, minUserScore, idLanguage, minCondition, isFoil, isSigned, isAltered, minAvailable}
 
 	public boolean isAltered() {
 		return isAltered;
@@ -51,11 +43,11 @@ public class Article implements Serializable
 	public void setLanguage(Localization language) {
 		this.language = language;
 	}
-	public int getIdArticle() {
+	public int getId() {
 		return idArticle;
 	}
-	public void setIdArticle(int idArticle) {
-		this.idArticle = idArticle;
+	public void setId(int id) {
+		this.idArticle = id;
 	}
 	public int getIdProduct() {
 		return idProduct;
@@ -124,7 +116,4 @@ public class Article implements Serializable
 	public void setLinks(Link links) {
 		this.links = links;
 	}
-	
-	
-	
 }

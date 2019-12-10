@@ -7,73 +7,38 @@ import java.util.List;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import connector.MkmAPIConnector;
 import entities.Account;
+import entities.Evaluation;
 import entities.User;
 import exceptions.MkmException;
-import responses.AccountResponse;
-import responses.MessageOverviewResponse;
-//import responses.MessagesWithUserResponse;
-import responses.UserCollectionResponse;
-import responses.UserResponse;
-import service.AccountService;
-import service.ArticleService;
-import service.CartServices;
-import service.ProductServices;
-import service.StockService;
-import service.UserService;
-import service.WantsService;
+import responses.account.AccountResponse;
+import responses.messages.MessageOverviewResponse;
+import responses.user.UserCollectionResponse;
+import responses.user.UserResponse;
+import service.MkmAPI;
+import service.account.AccountService;
+import service.articles.ArticleService;
+import service.authentication.Authenticator;
+import service.games.GamesService;
+import service.orders.OrderService;
+import service.products.ProductService;
+import service.users.UserService;
+import tools.MKMGames;
 //import tools.DisplayLanguage;
 import tools.MkmAPIConfig;
 
 public class Main
 {
+	private static String APP_TOKEN = "";
+	private static String APP_SECRET = "";
+	private static String ACCESS_TOKEN = "";
+	private static String ACCESS_TOKEN_SECRET = "";
 
-	private static String APP_TOKEN = "85by6ZmgNVeccIIN";
-	private static String APP_SECRET = "qIh6JjCa99rLs3O92yepOMop7LyPzvpZ";
-	private static String ACCESS_TOKEN = "TqiOs0yzqKvqvm12BvqdZbfQ3JcSushD";
-	private static String ACCESS_TOKEN_SECRET = "G82dOchJ2z4qbJi7oVKeKB5pN75MCaTl";
-
-	
-	@SuppressWarnings("unused")
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws IOException, MkmException 
 	{
-		try {
-			MkmAPIConfig.getInstance().init(ACCESS_TOKEN_SECRET,ACCESS_TOKEN,APP_SECRET,APP_TOKEN);
-		} catch (MkmException e) {
-			e.printStackTrace();
-		}
-		
-		UserService userService = UserService.getInstance();
-		UserResponse userResponse = userService.getUser("Itaca");
-		User itaca = userResponse.getUser();
-		
-		//AccountService accountService = AccountService.getInstance();
-		//AccountResponse aResponse = accountService.getAccountDetails();
-		//MessageOverviewResponse moResponse = accountService.getMessageOverview();
-		//MessagesWithUserResponse mwu = accountService.getMessagesThreadWithUser(itaca.getIdUser()); 
-		//MessagesWithUserResponse response = accountService.getSpecificMessage(itaca.getIdUser(), "5cbee2231335a8545e545506");
-		
-		//accountService.getUnreadMessages();
-		//accountService.redeemCoupons(new ArrayList<String>().add("12345"));
-		//AccountResponse a1 = accountService.changeVacationStatus(false, false, false);
-		//accountService.changeVacationStatus(true, true, false);
-		//accountService.changeVacationStatus(true, true, true);
-		//AccountResponse a2 = accountService.changeDisplayLanguage(DisplayLanguage.ENGLISH);
-		//accountService.changeDisplayLanguage(DisplayLanguage.FRENCH);
-		//accountService.changeDisplayLanguage(DisplayLanguage.GERMAN);
-		//accountService.changeDisplayLanguage(DisplayLanguage.SPANISH);
-		//accountService.changeDisplayLanguage(DisplayLanguage.ITALIAN);
-		
-//		UserService userService = UserService.getInstance();
-//		UserResponse uResponse = userService.getUser("Itaca");
-//		UserCollectionResponse ucResponse = userService.discoverUsers("itaca");
-		
-		ArticleService articleService = ArticleService.getInstance();
-		//articleService.getArticlesFromUser(itaca.getIdUser());
-		//articleService.getProducts("Springleaf");
-		articleService.getArticles("265535", null);
-		
-		System.out.println();
+		Authenticator auth = new Authenticator(ACCESS_TOKEN_SECRET,ACCESS_TOKEN,APP_SECRET,APP_TOKEN);
+		MkmAPI api = new MkmAPI(auth);
 	}
 
 }
