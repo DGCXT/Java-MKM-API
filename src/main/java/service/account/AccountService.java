@@ -40,8 +40,6 @@ public class AccountService {
 		String url = AccountUrlBuilder.buildAccountDetailsUrl();
 		
 		MkmConnectionResponse response = connector.GET(new HTTPRequest(url, ""));
-
-		System.out.println(response.getBody());
 		
 		return AccountResponse.fromXML(response.getBody());
 	}
